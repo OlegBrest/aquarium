@@ -48,19 +48,20 @@ namespace aquarium
             }
             while (this.stop_this)
             {
-                this.label1.Text = this.fishka.Count.ToString();
+                this.label1.Text = "Settlers = " + this.fishka.Count.ToString();
                 this.label1.Update();
                 if (this.fishka.Count == 0) this.stop_this = !this.stop_this;
+//                this.pictureBox1.SuspendLayout();
                 for (int ind = fishka.Count; ind > 0; ind--)
                 {
                     fish cur_fish = this.fishka[ind - 1];
-                    // Thread tr = new Thread(trd_st);
-                    // tr.Start(f);
-                    trd_st(cur_fish);
+ //                   Thread tr = new Thread(trd_st);
+//                    tr.Start(cur_fish);
+                    trd_st(cur_fish);  
                     if (cur_fish.repl_curr >= cur_fish.repl_count)
                     {
-                        this.fishka.Add(new fish(cur_fish.start_size, cur_fish.start_speed, cur_fish.predator_lvl, rnd.Next(300, 1000),
-                            rnd.Next(300, 500), cur_fish.strenght, cur_fish.fld_view, gr,
+                        this.fishka.Add(new fish(cur_fish.start_size, cur_fish.start_speed, cur_fish.predator_lvl, rnd.Next(4000, 10000),
+                            rnd.Next(3000, 5000), cur_fish.strenght, cur_fish.fld_view, gr,
                             cur_fish.x_coord, cur_fish.y_coord,
                             cur_fish.max_size, cur_fish.max_speed));
                         cur_fish.repl_curr = 0;
@@ -70,20 +71,26 @@ namespace aquarium
                         fishka.RemoveAt(ind - 1);
                     }
                 }
+//                this.pictureBox1.ResumeLayout();
+                //                Thread.Sleep(10);
             }
 
         }
         private void trd_st(object f)
         {
             fish fs = f as fish;
+            fs.timer++;
+            fs.live_count--;
             if (((int)this.x_gl == (int)fs.x_coord) && ((int)this.y_gl == (int)fs.y_coord))
             {
                 this.x_gl = rnd.Next((int)fs.max_size, this.pictureBox1.Size.Width - (int)fs.max_size);
                 this.y_gl = rnd.Next((int)fs.max_size, this.pictureBox1.Size.Height - (int)fs.max_size);
                 if (this.x_gl > (this.pictureBox1.Size.Width - fs.size)) this.x_gl = (int)(this.pictureBox1.Size.Width - fs.size);
                 if (this.y_gl > (this.pictureBox1.Size.Height - fs.size)) this.y_gl = (int)(this.pictureBox1.Size.Height - fs.size);
+
+                this.gr.FillEllipse(Brushes.Black, x_gl, y_gl, 10,10);
             }
-            if (fs.predator_lvl == 0)
+            if ((fs.predator_lvl == 0) && ((Math.Sqrt((double)(fs.x_dest * fs.x_dest + fs.y_dest * fs.y_dest)) - (Math.Sqrt((double)(fs.x_coord * fs.x_coord + fs.y_coord * fs.y_coord)))) <= fs.speed))
             {
                 fs.x_dest = this.x_gl;
                 fs.y_dest = this.y_gl;
@@ -92,7 +99,7 @@ namespace aquarium
 
             if (((int)fs.x_dest != (int)fs.x_coord) && ((int)fs.y_dest != (int)fs.y_coord))
             {
-                fs.mooving(this.pictureBox1.BackColor, Color.Red);
+                fs.mooving(this.pictureBox1.BackColor, Color.Green);
             }
             else
             {
@@ -114,6 +121,11 @@ namespace aquarium
         {
             this.stop_this = !this.stop_this;
         }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            gr = Graphics.FromHwnd(this.pictureBox1.Handle);
+        }
     }
 
     public class fish : Form
@@ -123,14 +135,15 @@ namespace aquarium
         public float max_size = 10;
         public double start_speed = 10;
         public double speed = 10;
-        public double max_speed = 15;
+        public double max_speed = 10;
         public int predator_lvl = 0;  // higher is predator
         public int live_count = 10000; // time to die
-        public int repl_count = 300;   // count to replicate
+        public int repl_count = 7000;   // count to replicate
         public int repl_curr = 0;
         public int strenght = 1;
         public int fld_view = 100;
         Graphics gr;
+        public int timer = 0;
 
         public float x_coord = 300;
         public float y_coord = 300;
@@ -146,7 +159,8 @@ namespace aquarium
             if (this.size > this.max_size) this.size = this.max_size;
             if (this.speed > this.max_speed) this.speed = this.max_speed;
         }
-        public fish(float size_new, double speed_new, int pred_new, int live_new, int repl_new, int str_new, int fld_new, Graphics gr_par, float x, float y, float max_size_new, double max_speed_new)
+        public fish(float size_new, double speed_new, int pred_new, int live_new, int repl_new,
+            int str_new, int fld_new, Graphics gr_par, float x, float y, float max_size_new, double max_speed_new)
         {
             this.start_size = size_new;
             this.size = size_new;
@@ -168,37 +182,52 @@ namespace aquarium
 
         public void mooving(Color clr_clear, Color clr_show)
         {
+            if (this.timer >= (100 / speed))
+            {
+                double angle = (Math.Atan2((this.y_coord - this.y_dest), (this.x_coord - this.x_dest)));
+                double grangl = angle * 180 / Math.PI;
+                grangl = grangl < 0 ? 360 + grangl : grangl;
+                if (this.size > this.max_size) this.size = this.max_size;
+                float x = (float)(this.x_coord - ( Math.Cos(angle)));
+                float y = (float)(this.y_coord - ( Math.Sin(angle)));
+                if (x < this.size) x = this.size;
+                if (y < this.size) y = this.size;
+
+
+                this.clear(clr_clear);
+                this.x_coord = x;
+                this.y_coord = y;
+                Brush br = new SolidBrush(clr_show);
+
+                this.gr.FillRectangle(br, this.x_coord, this.y_coord, this.size, this.size);
+
+
+                this.timer = 0;
+            }
+            repl_curr++;
+            this.size = this.size * 1.0002f;
             if (this.size > this.max_size) this.size = this.max_size;
-            float x = (float)(this.x_coord + (this.speed * (this.x_coord > this.x_dest ? -1 : 1)));
-            float y = (float)(this.y_coord + (this.speed * (this.y_coord > this.y_dest ? -1 : 1)));
-            if (x < this.size) x = this.size;
-            if (y < this.size) y = this.size;
-
-
-            this.clear(clr_clear);
-            this.x_coord = x;
-            this.y_coord = y;
-            Brush br = new SolidBrush(clr_show);
-            this.gr.FillRectangle(br, this.x_coord, this.y_coord, this.size, this.size);
-            this.live_count--;
+            this.start_size = Math.Abs(this.size / this.live_count);
+            if (this.start_size < 2) this.start_size = 2;
+            this.speed = this.start_speed / (this.size / 2);
+            if (this.speed > this.max_speed) this.speed = this.max_speed;
             if (this.live_count < 0)
             {
                 this.clear(clr_clear);
                 this.Dispose();
             }
-            repl_curr++;
-            this.size = this.size * 1.01f;
-            if (this.size > this.max_size) this.size = this.max_size;
-            this.start_size = Math.Abs(this.size / this.live_count);
-            if (this.start_size < 2) this.start_size = 2;
-            this.speed = this.start_speed / this.size;
-            if (this.speed > this.max_speed) this.speed = this.max_speed;
 
         }
         private void clear(Color clr)
         {
             Brush br = new SolidBrush(clr);
-            this.gr.FillRectangle(br, this.x_coord, this.y_coord, this.size, this.size);
+/*            if (this.InvokeRequired)
+            {
+                Invoke((MethodInvoker)delegate
+                  {       */
+                      this.gr.FillRectangle(br, this.x_coord, this.y_coord, this.size, this.size);
+//                 });
+ //           }
         }
     }
 }
