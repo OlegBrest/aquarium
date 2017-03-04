@@ -1,0 +1,22 @@
+C:\Users\pop\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\aquarium.csprojResolveAssemblyReference.cache
+C:\Users\pop\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\aquarium.Form1.resources
+C:\Users\pop\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\pop\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\aquarium.csproj.GenerateResource.Cache
+C:\Users\pop\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\Users\pop\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\pop\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+C:\Users\pop\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+C:\Users\pop\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+C:\Users\pop\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\aquarium.exe.config
+C:\Users\pop\Documents\Visual Studio 2015\Projects\aquarium\aquarium\bin\Debug\aquarium.exe.config
+C:\Users\pop\Documents\Visual Studio 2015\Projects\aquarium\aquarium\bin\Debug\aquarium.exe
+C:\Users\pop\Documents\Visual Studio 2015\Projects\aquarium\aquarium\bin\Debug\aquarium.pdb
+C:\Users\pop\Documents\Visual Studio 2015\Projects\aquarium\aquarium\obj\Debug\aquarium.csprojResolveAssemblyReference.cache
+C:\Users\pop\Documents\Visual Studio 2015\Projects\aquarium\aquarium\obj\Debug\aquarium.Form1.resources
+C:\Users\pop\Documents\Visual Studio 2015\Projects\aquarium\aquarium\obj\Debug\aquarium.Properties.Resources.resources
+C:\Users\pop\Documents\Visual Studio 2015\Projects\aquarium\aquarium\obj\Debug\aquarium.csproj.GenerateResource.Cache
+C:\Users\pop\Documents\Visual Studio 2015\Projects\aquarium\aquarium\obj\Debug\aquarium.exe
+C:\Users\pop\Documents\Visual Studio 2015\Projects\aquarium\aquarium\obj\Debug\aquarium.pdb
+C:\github\aquarium\aquarium\bin\Debug\aquarium.exe.config
+C:\github\aquarium\aquarium\obj\Debug\aquarium.exe
+C:\github\aquarium\aquarium\obj\Debug\aquarium.pdb
