@@ -26,3 +26,12 @@ C:\github\aquarium\aquarium\obj\Debug\aquarium.csprojResolveAssemblyReference.ca
 C:\github\aquarium\aquarium\obj\Debug\aquarium.Form1.resources
 C:\github\aquarium\aquarium\obj\Debug\aquarium.Properties.Resources.resources
 C:\github\aquarium\aquarium\obj\Debug\aquarium.csproj.GenerateResource.Cache
+E:\gitrepo\aquarium\aquarium\bin\Debug\aquarium.exe.config
+E:\gitrepo\aquarium\aquarium\obj\Debug\aquarium.exe
+E:\gitrepo\aquarium\aquarium\obj\Debug\aquarium.pdb
+E:\gitrepo\aquarium\aquarium\bin\Debug\aquarium.exe
+E:\gitrepo\aquarium\aquarium\bin\Debug\aquarium.pdb
+E:\gitrepo\aquarium\aquarium\obj\Debug\aquarium.csprojResolveAssemblyReference.cache
+E:\gitrepo\aquarium\aquarium\obj\Debug\aquarium.Form1.resources
+E:\gitrepo\aquarium\aquarium\obj\Debug\aquarium.Properties.Resources.resources
+E:\gitrepo\aquarium\aquarium\obj\Debug\aquarium.csproj.GenerateResource.Cache
