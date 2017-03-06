@@ -41,9 +41,10 @@ namespace aquarium
 
             for (int a = 1; a < (Convert.ToInt32(this.textBox1.Text)); a++)
             {
-                this.fishka.Add(new fish(2, 10, 0, 10000, 4000, 1, 100, 300, 300, 500, 100, 15, 15, Color.Green));
-                this.fishka.Add(new fish(2, 12, 1, 20000, 20000, 2, 150, 200, 200, 300, 300, 15, 16, Color.Blue));
-                this.fishka.Add(new fish(2, 14, 2, 30000, 30000, 3, 200, 500, 500, 500, 300, 15, 17, Color.Red));
+                this.fishka.Add(new fish(2, 10, 0, 15000, 4000, 1, 80, rnd.Next(500), rnd.Next(500), rnd.Next(500), 100, 15, 12, Color.Green));
+                this.fishka.Add(new fish(2, 10, 0, 15000, 7000, 1, 90, rnd.Next(500), rnd.Next(500), rnd.Next(500), 100, 10, 25, Color.Aqua));
+                this.fishka.Add(new fish(2, 10, 1, 30000, 35000, 2, 110, rnd.Next(500), rnd.Next(500), 300, rnd.Next(300), 10, 40, Color.Blue));
+                this.fishka.Add(new fish(2, 10, 2, 40000, 45000, 3, 120, rnd.Next(500), rnd.Next(500), 500, rnd.Next(300), 16, 30, Color.Red));
             }
             if (main_handl != 0)
             {
@@ -63,7 +64,7 @@ namespace aquarium
             Color clr_clear = this.pictureBox1.BackColor;
             while (this.stop_this)
             {
-               // gr.Clear(clr_clear);
+                // gr.Clear(clr_clear);
                 for (int ind = fishka.Count; ind > 0; ind--)
                 {
                     try
@@ -79,7 +80,7 @@ namespace aquarium
                             this.clear(clr_clear, cur_fish, gr);
                             cur_fish.x_coord = cur_fish.x_coord_next;
                             cur_fish.y_coord = cur_fish.y_coord_next;
-                            Brush br = new SolidBrush(cur_fish.fish_clr);                                            
+                            Brush br = new SolidBrush(cur_fish.fish_clr);
                             gr.FillRectangle(br, cur_fish.x_coord, cur_fish.y_coord, cur_fish.size, cur_fish.size);
                         }
                     }
@@ -88,7 +89,7 @@ namespace aquarium
 
                     }
                 }
-                
+
             }
         }
 
@@ -126,40 +127,49 @@ namespace aquarium
                                 // find victim
                                 if ((cur_fish.predator_lvl > next_fish.predator_lvl) && (cur_fish.victim_finded != false))
                                 {
-                                    if (cur_fish.target_range < range) cur_fish.target_range = range;
-                                    cur_fish.x_dest = next_fish.x_coord;
-                                    cur_fish.y_dest = next_fish.y_coord;
-                                    cur_fish.victim_finded = true;
+                                    if (cur_fish.target_range >= range)
+                                    {
+                                        cur_fish.id_victim = ind2;
+                                        cur_fish.target_range = range;
+                                        cur_fish.x_dest = next_fish.x_coord;
+                                        cur_fish.y_dest = next_fish.y_coord;
+                                        cur_fish.victim_finded = true;
+                                    }
                                 }
                                 // if is not victim
                                 if (cur_fish.predator_lvl < next_fish.predator_lvl)
                                 {
-                                    if (cur_fish.target_range < range) cur_fish.target_range = range;
-                                    cur_fish.victim_finded = false;
-                                    float x = (float)(cur_fish.x_coord + cur_fish.max_speed * 5 * (Math.Cos(angle)));
-                                    float y = (float)(cur_fish.y_coord + cur_fish.max_speed * 5 * (Math.Sin(angle)));
-                                    if (x > (this.pictureBox1.Size.Width - cur_fish.size)) x = (int)(this.pictureBox1.Size.Width - cur_fish.size);
-                                    if (y > (this.pictureBox1.Size.Height - cur_fish.size)) y = (int)(this.pictureBox1.Size.Height - cur_fish.size);
-                                    if (x < cur_fish.size) x = cur_fish.size;
-                                    if (y < cur_fish.size) y = cur_fish.size;
-                                    cur_fish.x_dest = x;
-                                    cur_fish.y_dest = y;
+                                    if (cur_fish.target_range <= range)
+                                    {
+                                        cur_fish.target_range = range;
+                                        cur_fish.victim_finded = false;
+                                        float x = (float)(cur_fish.x_coord + cur_fish.max_speed * 5 * (Math.Cos(angle)));
+                                        float y = (float)(cur_fish.y_coord + cur_fish.max_speed * 5 * (Math.Sin(angle)));
+                                        if (x > (this.pictureBox1.Size.Width - cur_fish.size)) x = (int)(this.pictureBox1.Size.Width - cur_fish.size);
+                                        if (y > (this.pictureBox1.Size.Height - cur_fish.size)) y = (int)(this.pictureBox1.Size.Height - cur_fish.size);
+                                        if (x < cur_fish.size) x = cur_fish.size;
+                                        if (y < cur_fish.size) y = cur_fish.size;
+                                        cur_fish.x_dest = x;
+                                        cur_fish.y_dest = y;
+                                    }
                                 }
 
                                 // if catch it
                                 if ((range < cur_fish.speed) && (cur_fish.predator_lvl > next_fish.predator_lvl) && (cur_fish.id_victim == ind2))
                                 {
-                                    cur_fish.repl_curr++;
+                                    cur_fish.repl_curr+=cur_fish.strenght;
                                     cur_fish.strenght++;
+                                    cur_fish.live_count += cur_fish.strenght;
                                     next_fish.live_count -= cur_fish.strenght;
                                 }
                             }
                         }
+//                        trd_st(cur_fish);
                     }
                     catch (Exception ex)
                     { }
                 }
-
+                Thread.Sleep(1);
             }
             Thread.CurrentThread.Abort();
         }
@@ -185,11 +195,14 @@ namespace aquarium
                     trd_st(cur_fish);
                     if (cur_fish.repl_curr >= cur_fish.repl_count)
                     {
-                        this.fishka.Add(new fish(cur_fish.start_size, cur_fish.start_speed, cur_fish.predator_lvl,
-                            rnd.Next((int)(cur_fish.live_start * 0.99), (int)(cur_fish.live_start * 1.01)),
-                            rnd.Next((int)(cur_fish.start_repl * 0.99), (int)(cur_fish.start_repl * 1.01)),
-                            cur_fish.strenght_start, cur_fish.fld_view, cur_fish.x_coord, cur_fish.y_coord, cur_fish.x_dest, cur_fish.y_dest,
-                            cur_fish.max_size, cur_fish.max_speed, cur_fish.fish_clr));
+                        if (this.fishka.Count < 5000)
+                        {
+                            this.fishka.Add(new fish(cur_fish.start_size, cur_fish.start_speed, cur_fish.predator_lvl,
+                                rnd.Next((int)(cur_fish.live_start * 0.99), (int)(cur_fish.live_start * 1.01)),
+                                rnd.Next((int)(cur_fish.start_repl * 0.99), (int)(cur_fish.start_repl * 1.01)),
+                                cur_fish.strenght_start, cur_fish.fld_view, cur_fish.x_coord, cur_fish.y_coord, cur_fish.x_dest, cur_fish.y_dest,
+                                cur_fish.max_size, cur_fish.max_speed, cur_fish.fish_clr));
+                        }
                         cur_fish.repl_curr = 0;
                     }
                     if (cur_fish.live_count < 0)
@@ -198,7 +211,7 @@ namespace aquarium
                     }
                 }
                 //                this.pictureBox1.ResumeLayout();
-                //                Thread.Sleep(10);
+                Thread.Sleep(1);
             }
             Thread.CurrentThread.Abort();
             return;
@@ -209,6 +222,7 @@ namespace aquarium
             fish fs = f as fish;
             fs.timer++;
             fs.live_count--;
+            fs.repl_curr++;
             if (((int)this.x_gl == (int)fs.x_coord) && ((int)this.y_gl == (int)fs.y_coord))
             {
                 this.x_gl = rnd.Next((int)fs.max_size, this.pictureBox1.Size.Width - (int)fs.max_size);
@@ -223,7 +237,7 @@ namespace aquarium
             }
 
             // if not target for predator try to random point
-            if ((fs.predator_lvl > 0) && (fs.victim_finded == null) && (Math.Sqrt((fs.x_dest - fs.x_coord) * (fs.x_dest - fs.x_coord) + (fs.y_dest - fs.y_coord) * (fs.y_dest - fs.y_coord))) < fs.speed) 
+            if ((fs.predator_lvl > 0) && (fs.victim_finded == null) && (Math.Sqrt((fs.x_dest - fs.x_coord) * (fs.x_dest - fs.x_coord) + (fs.y_dest - fs.y_coord) * (fs.y_dest - fs.y_coord))) < fs.speed)
             {
                 fs.x_dest = rnd.Next((int)fs.max_size, this.pictureBox1.Size.Width - (int)fs.max_size);
                 fs.y_dest = rnd.Next((int)fs.max_size, this.pictureBox1.Size.Height - (int)fs.max_size);
@@ -360,8 +374,7 @@ namespace aquarium
                 this.y_coord_next = y;
                 this.timer = 0;
             }
-            repl_curr++;
-            this.size = this.start_size + this.max_size * (((float)(this.live_start-this.live_count)) / ((float)this.live_start));
+            this.size = this.start_size + this.max_size * (((float)(this.live_start - this.live_count)) / ((float)this.live_start));
             if (this.size > this.max_size) this.size = this.max_size;
             this.start_size = Math.Abs(this.size / this.live_count);
             if (this.start_size < 2) this.start_size = 2;
