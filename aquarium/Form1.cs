@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.Timers;
 
 namespace aquarium
 {
@@ -20,6 +21,8 @@ namespace aquarium
         int x_gl = 0;
         int y_gl = 0;
         int main_handl = 0;
+        private static System.Timers.Timer tpo_timer;
+        bool need_2_update = true;
 
         public Form1()
         {
@@ -31,9 +34,30 @@ namespace aquarium
             this.y_gl = rnd.Next(this.pictureBox1.Size.Height / 4, this.pictureBox1.Size.Height * 3 / 4);
 
             // thread for starting draw
+            start_timer();
             Thread drawer = new Thread(draw_it);
             drawer.Start();
         }
+
+        private void start_timer()
+        {
+            tpo_timer = new System.Timers.Timer(10);
+            tpo_timer.Elapsed += tpo_timer_Tick;
+            tpo_timer.AutoReset = true;
+            tpo_timer.Enabled = true;
+        }
+
+        private void tpo_timer_Tick(object source, ElapsedEventArgs e)
+        {
+            if (this.need_2_update)
+            {
+                Graphics gr = this.pictureBox1.CreateGraphics();
+                Brush br = new SolidBrush(Color.FromArgb(51, this.pictureBox1.BackColor.R, this.pictureBox1.BackColor.G, this.pictureBox1.BackColor.B));
+                gr.FillRectangle(br, 0, 0, this.pictureBox1.Width, this.pictureBox1.Height);
+                this.need_2_update = false;
+            }
+        }
+
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -41,10 +65,10 @@ namespace aquarium
 
             for (int a = 1; a < (Convert.ToInt32(this.textBox1.Text)); a++)
             {
-                this.fishka.Add(new fish(2, 10, 0, 15000, 4000, 1, 80, rnd.Next(500), rnd.Next(500), rnd.Next(500), 100, 15, 12, Color.Green));
-                this.fishka.Add(new fish(2, 10, 0, 15000, 7000, 1, 90, rnd.Next(500), rnd.Next(500), rnd.Next(500), 100, 10, 25, Color.Aqua));
-                this.fishka.Add(new fish(2, 10, 1, 30000, 35000, 2, 110, rnd.Next(500), rnd.Next(500), 300, rnd.Next(300), 10, 40, Color.Blue));
-                this.fishka.Add(new fish(2, 10, 2, 40000, 45000, 3, 120, rnd.Next(500), rnd.Next(500), 500, rnd.Next(300), 16, 30, Color.Red));
+                this.fishka.Add(new fish(2, 40, 0, 1500000, 400000, 1, 80, rnd.Next(500), rnd.Next(500), rnd.Next(500), 100, 5, 48, Color.Green));
+                this.fishka.Add(new fish(2, 90, 0, 1500000, 700000, 1, 90, rnd.Next(500), rnd.Next(500), rnd.Next(500), 100, 3, 100, Color.Aqua));
+                this.fishka.Add(new fish(2, 150, 1, 3000000, 3500000, 2, 110, rnd.Next(500), rnd.Next(500), 300, rnd.Next(300), 3, 160, Color.Blue));
+                this.fishka.Add(new fish(2, 110, 2, 4000000, 4500000, 3, 120, rnd.Next(500), rnd.Next(500), 500, rnd.Next(300), 6, 120, Color.Red));
             }
             if (main_handl != 0)
             {
@@ -73,15 +97,15 @@ namespace aquarium
 
                         if (cur_fish.live_count <= 0)
                         {
-                            this.clear(clr_clear, cur_fish, gr);
+                            //                            this.clear(clr_clear, cur_fish, gr);
                         }
                         else
                         {
-                            this.clear(clr_clear, cur_fish, gr);
+                          //  this.clear(clr_clear, cur_fish, gr);
                             cur_fish.x_coord = cur_fish.x_coord_next;
                             cur_fish.y_coord = cur_fish.y_coord_next;
                             Brush br = new SolidBrush(cur_fish.fish_clr);
-                            gr.FillRectangle(br, cur_fish.x_coord, cur_fish.y_coord, cur_fish.size, cur_fish.size);
+                            gr.FillEllipse(br, cur_fish.x_coord, cur_fish.y_coord, cur_fish.size, cur_fish.size);
                         }
                     }
                     catch (Exception ex)
@@ -89,14 +113,16 @@ namespace aquarium
 
                     }
                 }
-
+                this.need_2_update = true;
             }
         }
 
         private void clear(Color clr, fish crnt_fish, Graphics gr)
         {
-            Brush br = new SolidBrush(clr);
-            this.gr.FillRectangle(br, crnt_fish.x_coord, crnt_fish.y_coord, crnt_fish.size, crnt_fish.size);
+            Brush br = new SolidBrush(Color.FromArgb(15, clr.R, clr.G, clr.B));
+            //            this.gr.FillRectangle(br, crnt_fish.x_coord, crnt_fish.y_coord, crnt_fish.size, crnt_fish.size);
+            this.gr.FillRectangle(br, 0, 0, this.pictureBox1.Width, this.pictureBox1.Height);//, crnt_fish.size, crnt_fish.size);
+                                                                                             //            this.gr.Clear(Color.FromArgb(240, clr.R, clr.G, clr.B));
         }
 
         private void vic_finder()
@@ -157,14 +183,14 @@ namespace aquarium
                                 // if catch it
                                 if ((range < cur_fish.speed) && (cur_fish.predator_lvl > next_fish.predator_lvl) && (cur_fish.id_victim == ind2))
                                 {
-                                    cur_fish.repl_curr+=cur_fish.strenght;
+                                    cur_fish.repl_curr += cur_fish.strenght;
                                     cur_fish.strenght++;
                                     cur_fish.live_count += cur_fish.strenght;
                                     next_fish.live_count -= cur_fish.strenght;
                                 }
                             }
                         }
-//                        trd_st(cur_fish);
+                        //                        trd_st(cur_fish);
                     }
                     catch (Exception ex)
                     { }

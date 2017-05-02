@@ -43,6 +43,7 @@
             // 
             // splitContainer1
             // 
+            this.splitContainer1.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
@@ -66,6 +67,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.SystemColors.Control;
             this.label1.Location = new System.Drawing.Point(272, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 13);
@@ -74,16 +76,18 @@
             // 
             // stop_bttn
             // 
+            this.stop_bttn.BackColor = System.Drawing.SystemColors.Control;
             this.stop_bttn.Location = new System.Drawing.Point(896, 8);
             this.stop_bttn.Name = "stop_bttn";
             this.stop_bttn.Size = new System.Drawing.Size(75, 23);
             this.stop_bttn.TabIndex = 2;
             this.stop_bttn.Text = "Стоп";
-            this.stop_bttn.UseVisualStyleBackColor = true;
+            this.stop_bttn.UseVisualStyleBackColor = false;
             this.stop_bttn.Click += new System.EventHandler(this.stop_bttn_Click);
             // 
             // textBox1
             // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.Control;
             this.textBox1.Location = new System.Drawing.Point(8, 8);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(144, 20);
@@ -91,12 +95,13 @@
             // 
             // button1
             // 
+            this.button1.BackColor = System.Drawing.SystemColors.Control;
             this.button1.Location = new System.Drawing.Point(160, 8);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "Добавить";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // pictureBox1
